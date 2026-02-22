@@ -4,6 +4,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance,
     VectorParams,
+    SparseVectorParams,
     PointStruct,
     CollectionInfo as QdrantCollectionInfo
 )
@@ -39,10 +40,15 @@ class VectorStoreService:
         if collection_name not in collection_names:
             self.client.create_collection(
                 collection_name=collection_name,
-                vectors_config=VectorParams(
-                    size=vector_size,
-                    distance=distance
-                )
+                vectors_config={
+                    "dense": VectorParams(
+                        size=vector_size,
+                        distance=distance,
+                    )
+                },
+                sparse_vectors_config={
+                    "sparse": SparseVectorParams(),
+                },
             )
 
     def upsert_chunks(
@@ -80,7 +86,7 @@ class VectorStoreService:
             points.append(
                 PointStruct(
                     id=point_id,
-                    vector=embedding,
+                    vector={"dense": embedding},
                     payload=payload
                 )
             )
@@ -126,7 +132,7 @@ class VectorStoreService:
         """Search for similar vectors"""
         results = self.client.search(
             collection_name=collection_name,
-            query_vector=query_vector,
+            query_vector=("dense", query_vector),
             limit=limit,
             query_filter=filters
         )

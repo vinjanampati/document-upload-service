@@ -1,0 +1,42 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Git
+.git/
+.gitignore
+.github/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+
+# Uploads (will use S3 in production)
+uploads/
+*.pdf
+*.docx
+
+# Documentation
+*.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
